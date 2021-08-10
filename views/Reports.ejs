@@ -1,0 +1,119 @@
+<html>
+
+<style>
+    * {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Lora", serif;
+}
+#patients-container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1000px;
+}
+
+.card {
+  width: 600px;
+  height: 300px;
+  box-shadow: 5px 5px 4px gray;
+  transform: scale(0.9);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.8s ease;
+  border: 2px solid rgba(54, 54, 54, 0.7);
+}
+
+h1 {
+  color: rgb(54, 54, 54);
+  text-align: center;
+  padding: 10px 0px 20px 0px;
+  font-size: 28px;
+}
+
+.patient-info {
+  display: flex;
+  flex-direction: column;
+  height: 80%;
+  width: 90%;
+  justify-content: space-around;
+  margin: auto;
+}
+.content-aligning {
+  display: flex;
+  justify-content: space-between;
+}
+p {
+  color: rgb(54, 54, 54);
+}
+span {
+  font-size: 18px;
+  min-width: 200px;
+  color: rgb(54, 54, 54);
+}
+
+.dynamic-data {
+  font-size: 16px;
+  color: rgb(50, 50, 50);
+}
+.content-aligning-fix {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+}
+.content-aligning-fix span {
+  padding-bottom: 10px;
+}
+
+.content-aligning-fix-i {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.content-aligning-fix-i span {
+  min-width: 200px;
+}
+.p-fix {
+  padding: 10px 0px 10px 0px;
+}
+
+</style>
+
+<% Reports.forEach(report=> { %>
+<body>
+
+  <section id="patients-container">
+
+    <div class="card">
+
+      <h1><%= report.data().url %></h1>
+      
+      <div class="patient-info">
+
+
+        <div class="content-aligning">
+          <span> Availability: <span class="dynamic-data"><%= report.data().availability %></span></span>
+          <span>Average Response Time(s): <span class="dynamic-data"><%= report.data().responseTime %></span></span>
+        </div>
+
+        <div class="content-aligning">
+          <span>Uptime(s): <span class="dynamic-data"><%= report.data().uptime %></span></span>
+          <span>Downtime(s): <span class="dynamic-data"><%= report.data().downtime %></span></span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</body>
+<% }); %>  
+
+</html>

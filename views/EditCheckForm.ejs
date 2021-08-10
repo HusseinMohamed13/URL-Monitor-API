@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<style>
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  /* Full-width input fields */
+  input[type=text],
+  input[type=password] {
+    width: 40%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    display: inline-block;
+    border: none;
+    background: #f1f1f1;
+  }
+
+  /* Add a background color when the inputs get focus */
+  input[type=text]:focus,
+  input[type=password]:focus {
+    background-color: #ddd;
+    outline: none;
+  }
+
+  /* Set a style for all buttons */
+  .createBtn {
+    background-color: #04AA6D;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    opacity: 0.9;
+  }
+
+  button:hover {
+    opacity: 1;
+  }
+
+  /* Extra styles for the cancel button */
+  .cancelbtn {
+    padding: 14px 20px;
+    background-color: #f44336;
+  }
+
+  /* Float cancel and signup buttons and add an equal width */
+  .editBtn {
+    float: left;
+    width: 50%;
+  }
+
+  /* Add padding to container elements */
+  .container {
+    padding: 16px;
+  }
+
+  /* The Modal (background) */
+  .modal {
+    position: fixed;
+    /* Stay in place */
+    z-index: 1;
+    /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: #474e5d;
+    padding-top: 50px;
+  }
+
+  /* Modal Content/Box */
+  .modal-content {
+    background-color: #fefefe;
+    margin: 5% auto 15% auto;
+    /* 5% from the top, 15% from the bottom and centered */
+    border: 1px solid #888;
+    width: 80%;
+    /* Could be more or less, depending on screen size */
+  }
+
+  /* Style the horizontal ruler */
+  hr {
+    border: 1px solid #f1f1f1;
+    margin-bottom: 25px;
+  }
+
+  /* The Close Button (x) */
+  .close {
+    position: absolute;
+    right: 35px;
+    top: 15px;
+    font-size: 40px;
+    font-weight: bold;
+    color: #f1f1f1;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: #f44336;
+    cursor: pointer;
+  }
+
+  /* Clear floats */
+  .clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+  }
+
+  /* Change styles for cancel button and signup button on extra small screens */
+  @media screen and (max-width: 300px) {
+    .signupbtn {
+      width: 100%;
+    }
+  }
+</style>
+
+<body>
+
+  <div id="id01" class="modal">
+    <span onclick="document.getElementById('id01').style.display='none'" class="close"
+      title="Close Modal">&times;</span>
+    <form class="modal-content" action="/monitoring/edit" method="POST">
+      <div class="container">
+        <h1>Edit Check</h1>
+        <p>* required fields</p>
+        <hr>
+        <input type="hidden" name="docId" value=<%= docId %> >
+        <label for="name"><b>Name*</b></label>
+        <input type="text" name="name" required value=<%=result.name %> >
+        <label for="url"><b>URL*</b></label>
+        <input type="text" value=<%=result.url %> name="url" required><br>
+
+        <label for="protocol"><b>Protocol*</b></label>
+        <select name="protocol" required>
+          <% if(result.protocol=="http" ){ %>
+            <option value="http" selected>HTTP</option>
+            <option value="https">HTTPS</option>
+            <option value="tcp">TCP</option>
+          <% } %>
+          <% if(result.protocol=="https" ){ %>
+              <option value="http">HTTP</option>
+              <option value="https" selected>HTTPS</option>
+              <option value="tcp">TCP</option>
+          <% } %>
+          <% if(result.protocol=="tcp" ){ %>
+            <option value="http">HTTP</option>
+            <option value="https" selected>HTTPS</option>
+            <option value="tcp" selected>TCP</option>
+          <% } %>          
+        </select>
+        <br><br>
+
+        <label for="path"><b>Path</b></label>
+        <input type="text" name="path" value=<%=result.path %>>
+
+        <label for="port"><b>Port</b></label>
+        <input type="text" name="port" value=<%=result.port %>><br>
+
+        <label for="webhook"><b>Webhook</b></label>
+        <input type="text" name="webhook" value=<%=result.webhook %>>
+
+        <label for="timeout"><b>Timeout in seconds</b></label>
+        <input type="text" name="timeout" value=<%=result.timeout %> ><br>
+
+        <label for="interval"><b>Interval in minutes</b></label>
+        <input type="text" name="interval" value=<%=result.interval %> >
+
+        <label for="threshold"><b>Threshold</b></label>
+        <input type="text" name="threshold" value=<%=result.threshold %> ><br>
+
+        <label for="authUsername"><b>Username</b></label>
+        <input type="text" name="authUsername" value=<%=result.authUsername %> >
+
+        <label for="psw"><b>Password</b></label>
+        <input type="password" name="authPassword" value=<%=result.authPassword %> ><br>
+
+        <label for="authentication"><b>Httpheaders</b></label>
+        <button type="button" onclick="addHttpHeader()">AddHeader</button>
+        <br>
+        <br>
+        <div id="div1">
+          <% n=0 %>
+            <% k="httpKey" %>
+              <% v="httpValue" %>
+                <% while (result[k]) { %>
+                  <label for="key"><b>Key</b></label>
+                  <input type="text" name=<%= k %> value=<%=result[k] %> >
+                  <label for="value"><b>Value</b></label>
+                  <input type="text" name=<%= v %> value=<%=result[v] %> >
+                  <% n++; %>
+                    <% k="httpKey" + String(n); %>
+                      <% v="httpValue" + String(n); %>
+                        <% } %>
+        </div>
+        <div class="clearfix">
+          <button type="submit" class="createBtn"><sub>submit</sub></button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+
+  <script>
+
+    function addHttpHeader() {
+      var element = document.getElementById("div1");
+      var id = element.childElementCount/4;
+      console.log(id)
+
+      var keyLabel = document.createElement("label");
+      keyLabel.innerHTML = "<br><b>Key</b>";
+      var keyInput = document.createElement("input");
+      keyInput.setAttribute('type', 'text');
+      keyInput.setAttribute('name', "httpKey" + id);
+
+      var ValueLabel = document.createElement("label");
+      ValueLabel.innerHTML = "<b>Value</b>";
+      var ValueInput = document.createElement("input");
+      ValueInput.setAttribute('type', 'text');
+      ValueInput.setAttribute('name', "httpValue" + id);
+
+      element.appendChild(keyLabel);
+      element.appendChild(keyInput);
+      element.appendChild(ValueLabel);
+      element.appendChild(ValueInput);
+    }
+
+  </script>  
+</body>
+
+</html>
